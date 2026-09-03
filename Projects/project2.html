@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CogniBytes — Shooter Games</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0b1016;color:#edf3f8;font-family:Arial,Helvetica,sans-serif}header{padding:16px 5%;border-bottom:1px solid #273442;background:#0d141c;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}.logo{font-size:24px;font-weight:800}.logo span{opacity:.65}a{color:#9ed8ff;text-decoration:none}main{width:min(1150px,90%);margin:45px auto}.hero{text-align:center;margin-bottom:35px}.hero h1{font-size:clamp(36px,6vw,64px);margin:0 0 10px}.hero p{color:#9eacb8;font-size:18px}.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}.card{background:#111a23;border:1px solid #2a3947;border-radius:16px;padding:22px;transition:.2s}.card:hover{transform:translateY(-4px);border-color:#557086}.card h2{margin:0 0 10px}.card p{color:#aebac5;line-height:1.5;min-height:72px}.btn{border:0;border-radius:10px;padding:11px 16px;background:#e8f2f8;color:#101820;font-weight:700;cursor:pointer}.viewer{display:none;margin-top:30px;background:#0d141c;border:1px solid #2a3947;border-radius:16px;overflow:hidden}.viewer.active{display:block}.viewerbar{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #273442}.framewrap{width:100%;height:min(72vh,720px);background:#000}.framewrap iframe{width:100%;height:100%;border:0;display:block}small{color:#82909d}footer{text-align:center;color:#667482;padding:35px}@media(max-width:600px){main{width:94%;margin:28px auto}.framewrap{height:65vh}}
+</style>
+</head>
+<body>
+<header><div class="logo">⌬ CogniBytes <span>/ Shooter Games</span></div><a href="../index.html">← Back to Projects</a></header>
+<main>
+<section class="hero"><h1>🔫 Shooter Games</h1><p>Browser shooters and action games embedded directly into Project #2.</p></section>
+<section class="games">
+<article class="card"><h2>⚡ TRY SHOOT ME</h2><p>Fast-paced action with shooting, grappling, parrying, one-hit kills and slow-motion moments.</p><button class="btn" onclick="play('TRY SHOOT ME','https://html-classic.itch.zone/html/16091940/Prison%20Massacre%20Itch/index.html')">Play</button><br><small>Keyboard + mouse</small></article>
+<article class="card"><h2>🎯 FPS Shooter</h2><p>A 3D WebGL FPS with exploration, aiming, shooting, jumping and sprinting.</p><button class="btn" onclick="play('FPS Shooter','https://html-classic.itch.zone/html/15145206/FPS%20Shooter/index.html?v=1782877187')">Play</button><br><small>WASD · mouse · space · shift</small></article>
+<article class="card featured"><h2>🚁 War Brokers</h2><p>Open-world browser FPS with weapons, vehicles, tanks, helicopters and large maps.</p><button class="btn" onclick="play('War Brokers','https://html-classic.itch.zone/html/6127965/index.html?v=1782290059')">Play</button><br><small>Multiplayer · vehicles · FPS</small></article>
+<article class="card"><h2>🔥 Kour.io</h2><p>Fast-paced multiplayer FPS with lots of guns, classes, maps, parkour movement and Battle Royale.</p><button class="btn" onclick="play('Kour.io','https://html-classic.itch.zone/html/10576516/index.html?v=1782320016')">Play</button><br><small>Multiplayer · movement · FPS</small></article>
+<article class="card"><h2>👑 Lordz.io</h2><p>Build your army, collect gold, recruit units and battle for control in this chaotic .io strategy game.</p><button class="btn" onclick="play('Lordz.io','https://hapagames.com/game/lordz-io.embed')">Play</button><br><small>Strategy · .io · multiplayer</small></article>
+<article class="card"><h2>⚔️ Venge.io</h2><p>Fast competitive multiplayer FPS with heroes, weapons, abilities and objective-based arena combat.</p><button class="btn" onclick="play('Venge.io','https://www.pomu.com/embed/venge-io')">Play</button><br><small>Multiplayer · FPS · abilities</small></article>
+<article class="card"><h2>🐟 Deeeep.io</h2><p>Massive multiplayer underwater survival where you evolve from a small fish into stronger sea creatures.</p><button class="btn" onclick="play('Deeeep.io','https://www.miniplay.com/embed/deeeep-io')">Play</button><br><small>.io · multiplayer · evolution</small></article>
+<article class="card"><h2>🧟 ZombsRoyale.io</h2><p>Fast 2D battle royale where you loot weapons, fight other players and survive the shrinking zone.</p><button class="btn" onclick="play('ZombsRoyale.io','https://kiz10.com/embed/zombsroyale-io/')">Play</button><br><small>Battle royale · multiplayer · shooter</small></article>
+<article class="card"><h2>⚔️ BrutalMania.io</h2><p>Chaotic gladiator arena where you fight rivals, collect gold and upgrade your weapons and character.</p><button class="btn" onclick="play('BrutalMania.io','https://www.miniplay.com/embed/brutalmania-io')">Play</button><br><small>Action · PvP · .io</small></article>
+<article class="card"><h2>💥 Diep.io</h2><p>Control a tank, destroy shapes and enemies, level up and evolve into stronger tank classes.</p><button class="btn" onclick="play('Diep.io','https://www.minijuegos.com/embed/diep-io')">Play</button><br><small>Tank · PvP · upgrades</small></article>
+<article class="card"><h2>🟦 Paper.io 2</h2><p>Capture territory while protecting your trail and cutting off opponents before they can eliminate you.</p><button class="btn" onclick="play('Paper.io 2','https://www.miniplay.com/embed/paper-io-2')">Play</button><br><small>Territory · multiplayer · .io</small></article>
+<article class="card"><h2>🐍 Slither.io</h2><p>Grow your snake by collecting glowing orbs and outmaneuvering other players in the arena.</p><button class="btn" onclick="play('Slither.io','https://www.gameflare.com/embed/slitherio/')">Play</button><br><small>Multiplayer · arcade · .io</small></article>
+<article class="card"><h2>🐮 MooMoo.io</h2><p>Gather resources, build your base, upgrade your gear and defend your territory against other players.</p><button class="btn" onclick="play('MooMoo.io','https://www.gameflare.com/embed/moomooio/')">Play</button><br><small>.io · survival · multiplayer</small></article>
+</section>
+<section class="viewer" id="viewer"><div class="viewerbar"><strong id="title">Game</strong><button class="btn" onclick="closeGame()">Close Game</button></div><div class="framewrap"><iframe id="frame" allow="fullscreen; autoplay; gamepad; pointer-lock" allowfullscreen></iframe></div></section>
+</main><footer>CogniBytes · Project #2</footer>
+<script>
+function play(title,url){document.getElementById('title').textContent=title;document.getElementById('frame').src=url;document.getElementById('viewer').classList.add('active');document.getElementById('viewer').scrollIntoView({behavior:'smooth'});}
+function closeGame(){document.getElementById('frame').src='about:blank';document.getElementById('viewer').classList.remove('active');}
+</script>
+</body>
+</html>

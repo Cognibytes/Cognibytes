@@ -1,0 +1,3431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CogniBytes</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f6f8;
+  color: #20252b;
+}
+
+header {
+  background: #17212b;
+  color: white;
+  padding: 18px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,.15);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+.logo-mark {
+  width: 40px; height: 40px; display: grid; place-items: center; position: relative;
+  border: 1px solid rgba(255,255,255,.25); border-radius: 11px;
+  background: linear-gradient(135deg, #2864d7, #17212b);
+  box-shadow: 0 6px 18px rgba(40,100,215,.25); overflow: hidden;
+  font-size: 26px; line-height: 1; transition: transform .35s ease, box-shadow .35s ease;
+}
+.logo-mark b { position: absolute; font-size: 8px; letter-spacing: -1px; transform: translateY(1px); }
+.logo:hover .logo-mark { transform: rotate(8deg) scale(1.08); box-shadow: 0 8px 24px rgba(40,100,215,.4); }
+
+nav a {
+  color: #d9e1e8;
+  text-decoration: none;
+  margin-left: 25px;
+  cursor: pointer;
+}
+
+nav a { position: relative; transition: color .2s ease, transform .2s ease; }
+nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 2px; border-radius: 99px; background: #4f86f7; transform: scaleX(0); transition: transform .22s ease; }
+nav a:hover { color: white; transform: translateY(-1px); }
+nav a:hover::after { transform: scaleX(1); }
+
+main {
+  width: 86%;
+  max-width: 1200px;
+  margin: 45px auto;
+}
+
+.hero {
+  background: white;
+  padding: 45px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.06);
+  margin-bottom: 30px;
+  animation: cardIn .5s cubic-bezier(.22,1,.36,1) both;
+}
+
+.hero h1 {
+  font-size: 38px;
+  margin-bottom: 12px;
+}
+
+.hero p {
+  color: #69737d;
+  font-size: 17px;
+}
+
+.section { display: none; }
+.section.active { display: block; animation: pageIn .42s cubic-bezier(.22,1,.36,1) both; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(16px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes cardIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 3px 15px rgba(0,0,0,.06);
+  border: 1px solid transparent;
+  transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s ease, border-color .25s ease;
+}
+.card:hover { transform: translateY(-6px); box-shadow: 0 12px 28px rgba(23,33,43,.11); border-color: #dbe6fb; }
+
+.card h2 {
+  margin-bottom: 8px;
+}
+
+.card p {
+  color: #707982;
+  margin-bottom: 18px;
+}
+
+button {
+  border: none;
+  background: #2864d7;
+  color: white;
+  padding: 10px 17px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: transform .16s ease, background .2s ease, box-shadow .2s ease;
+}
+button:hover { background: #1f52b5; transform: translateY(-2px); box-shadow: 0 7px 16px rgba(40,100,215,.18); }
+button:active { transform: translateY(0) scale(.97); box-shadow: none; }
+
+/* =========================
+   RESOURCE CATEGORIES
+========================= */
+
+.resource-category {
+  margin-top: 30px;
+}
+
+.resource-category:first-child {
+  margin-top: 20px;
+}
+
+.resource-category h2 {
+  font-size: 25px;
+  margin-bottom: 7px;
+}
+
+.resource-category > p {
+  color: #707982;
+  margin-bottom: 15px;
+}
+
+/* =========================
+   COLLAPSIBLE TOOLS
+========================= */
+
+.tools-list {
+  margin-top: 20px;
+}
+
+.tool-item {
+  margin-bottom: 10px;
+}
+
+.tool-accordion {
+  width: 100%;
+  background: white;
+  color: #20252b;
+  border: 1px solid #dce2e7;
+  border-radius: 10px;
+  padding: 17px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+}
+
+.tool-accordion:hover {
+  background: #f8fafc;
+  color: #20252b;
+}
+
+.tool-accordion.open {
+  border-radius: 10px 10px 0 0;
+  background: #eef4ff;
+  color: #2864d7;
+}
+
+.tool-arrow {
+  transition: transform .2s;
+}
+
+.tool-accordion.open .tool-arrow {
+  transform: rotate(90deg);
+}
+
+.tool-content { display: block; max-height: 0; opacity: 0; overflow: hidden; background: white; border: 1px solid #dce2e7; border-top: none; border-radius: 0 0 10px 10px; padding: 0 22px; transition: max-height .42s ease, opacity .25s ease, padding .35s ease; }
+.tool-content.open { max-height: 3000px; opacity: 1; padding: 22px; }
+
+.tool-content h2 {
+  margin-bottom: 8px;
+}
+
+.tool-content h3 {
+  margin-top: 18px;
+  margin-bottom: 8px;
+}
+
+.tool-content p {
+  color: #707982;
+  margin-bottom: 15px;
+  line-height: 1.55;
+}
+
+.tool-content ul,
+.tool-content ol {
+  margin: 10px 0 15px 25px;
+  line-height: 1.7;
+}
+
+.tool-content li {
+  margin-bottom: 3px;
+}
+
+.tool-content input,
+.tool-content select,
+.tool-content textarea {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #ccd4dc;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+.tool-content input:focus, .tool-content select:focus, .tool-content textarea:focus, #display:focus, .unlock-box input:focus { outline: none; border-color: #2864d7; box-shadow: 0 0 0 3px rgba(40,100,215,.12); }
+
+.tool-result {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f0f4f8;
+  border-radius: 8px;
+  min-height: 20px;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+/* =========================
+   MATH RESOURCE CONTENT
+========================= */
+
+.math-box {
+  background: #f6f8fa;
+  border-left: 4px solid #2864d7;
+  padding: 14px 16px;
+  border-radius: 6px;
+  margin: 12px 0;
+  line-height: 1.7;
+}
+
+.formula {
+  font-family: "Courier New", monospace;
+  background: #eef1f4;
+  padding: 10px 12px;
+  border-radius: 7px;
+  margin: 8px 0;
+  font-weight: 600;
+  overflow-x: auto;
+}
+
+.example {
+  background: #f8fafc;
+  border: 1px solid #e0e5ea;
+  padding: 14px;
+  border-radius: 8px;
+  margin-top: 12px;
+  line-height: 1.65;
+}
+
+.example strong {
+  color: #2864d7;
+}
+
+.symbol-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.symbol-card {
+  background: #f6f8fa;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e0e5ea;
+}
+
+.symbol-card strong {
+  font-size: 18px;
+  margin-right: 7px;
+}
+
+/* =========================
+   RESOURCE CATEGORIES
+========================= */
+
+.resource-categories {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.resource-category-button {
+  width: 100%;
+  min-height: 90px;
+  padding: 22px 25px;
+  background: white;
+  color: #20252b;
+  border: 1px solid #dce2e7;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  font-size: 18px;
+  font-weight: 700;
+  box-shadow: 0 3px 15px rgba(0,0,0,.06);
+}
+
+.resource-category-button { transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s ease, background .2s ease, color .2s ease; }
+.resource-category-button:hover { background: #eef4ff; color: #2864d7; transform: translateY(-4px); box-shadow: 0 10px 24px rgba(40,100,215,.10); }
+
+.resource-page {
+  display: none;
+}
+
+.resource-page.active { display: block; animation: pageIn .35s cubic-bezier(.22,1,.36,1) both; }
+
+.resource-back {
+  margin-bottom: 18px;
+  background: #2d3945;
+}
+
+.resource-back:hover {
+  background: #40505f;
+}
+
+/* =========================
+   PERIODIC TABLE
+========================= */
+
+.periodic-wrapper {
+  overflow-x: auto;
+}
+
+.periodic-table {
+  display: grid;
+  grid-template-columns: repeat(18, minmax(48px, 1fr));
+  gap: 4px;
+  min-width: 950px;
+}
+
+.element {
+  min-height: 55px;
+  border-radius: 5px;
+  background: #eef2f5;
+  padding: 5px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #d5dce2;
+}
+
+.element { transition: transform .18s ease, background .18s ease, box-shadow .18s ease; }
+.element:hover { background: #dfe8f5; transform: translateY(-3px) scale(1.03); box-shadow: 0 6px 12px rgba(23,33,43,.10); }
+
+.element .number {
+  font-size: 9px;
+  color: #707982;
+  display: block;
+}
+
+.element .symbol {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.element .name {
+  font-size: 8px;
+  display: block;
+}
+
+/* =========================
+   CALCULATOR
+========================= */
+
+.calculator {
+  max-width: 430px;
+  margin: 25px auto 0;
+  background: #17212b;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.calc-top {
+  display: flex;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.calc-top button {
+  flex: 1;
+  font-size: 12px;
+  padding: 8px;
+  background: #2d3945;
+}
+
+#display {
+  width: 100%;
+  height: 65px;
+  margin-bottom: 12px;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 24px;
+  text-align: right;
+  background: white;
+}
+
+.calc-buttons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.calc-buttons button {
+  min-height: 46px;
+  font-size: 15px;
+  background: #2d3945;
+}
+
+.calc-buttons button:hover {
+  background: #40505f;
+}
+
+.calc-buttons .equals {
+  background: #2864d7;
+}
+
+/* =========================
+   PROJECTS
+========================= */
+
+.unlock-box {
+  max-width: 500px;
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  margin-top: 20px;
+  box-shadow: 0 4px 18px rgba(0,0,0,.07);
+}
+
+.unlock-box input {
+  padding: 12px;
+  width: 65%;
+  border: 1px solid #ccd2d8;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-right: 5px;
+}
+
+#message {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.private {
+  display: none;
+}
+
+.private.unlocked {
+  display: block;
+}
+
+.project-card {
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+footer {
+  text-align: center;
+  padding: 35px;
+  color: #89919a;
+  font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+@media (max-width: 700px) {
+  header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  nav a {
+    margin: 0 7px;
+  }
+
+  main {
+    width: 94%;
+    margin: 25px auto;
+  }
+
+  .hero {
+    padding: 30px;
+  }
+
+  .hero h1 {
+    font-size: 30px;
+  }
+
+  .resource-categories {
+    grid-template-columns: 1fr;
+  }
+
+  .unlock-box input {
+    width: 100%;
+    margin-bottom: 10px;
+    margin-right: 0;
+  }
+
+  .calc-buttons {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo" aria-label="CogniBytes">
+  <span class="logo-mark" aria-hidden="true">⌬<b>CB</b></span>
+  <span>CogniBytes</span>
+</div>
+
+  <nav>
+    <a onclick="showSection('home')">Home</a>
+    <a onclick="showSection('resources')">Resources</a>
+    <a onclick="showSection('calculator')">Calculator</a>
+    <a onclick="showSection('projects')">Projects</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- =========================
+     HOME
+========================= -->
+
+<section id="home" class="section active">
+
+  <div class="hero">
+    <h1>Welcome to CogniBytes</h1>
+    <p>
+      Useful tools, study resources, calculators, references, and personal projects.
+    </p>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h2>🧮 Scientific Calculator</h2>
+      <p>A TI-30XIIS-inspired scientific calculator.</p>
+      <button onclick="showSection('calculator')">
+        Open Calculator
+      </button>
+    </div>
+
+    <div class="card">
+      <h2>🛠️ Tools and Resources</h2>
+      <p>Utilities, math references, study guides, and other useful resources.</p>
+      <button onclick="showSection('resources')">
+        Open Tools
+      </button>
+    </div>
+
+    <div class="card">
+      <h2>📁 Projects</h2>
+      <p>Nothing to see here.</p>
+      <button onclick="showSection('projects')">
+        Open
+      </button>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     TOOLS AND RESOURCES
+========================= -->
+
+<section id="resources" class="section">
+
+  <div class="hero">
+
+    <h1>Tools and Resources</h1>
+
+    <p>
+      Useful utilities, math references, study guides, and educational resources.
+    </p>
+
+    <div id="resourceCategories" class="resource-categories">
+
+      <button class="resource-category-button" onclick="showResourceCategory('utilities')">
+        <span>🛠️ Utilities</span>
+        <span>→</span>
+      </button>
+
+      <button class="resource-category-button" onclick="showResourceCategory('mathResources')">
+        <span>📐 Math Resources</span>
+        <span>→</span>
+      </button>
+
+    </div>
+
+  </div>
+
+  <div id="utilities" class="resource-page">
+
+    <button class="resource-back" onclick="closeResourceCategory()">← Back to Resources</button>
+
+<div class="resource-category">
+
+      <h2>🛠️ Utilities</h2>
+
+      <p>
+        Handy tools for school, studying, projects, and everyday use.
+      </p>
+
+      <div class="tools-list">
+
+
+        <!-- PERIODIC TABLE -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('periodicTool', this)"
+          >
+            <span>🧪 Periodic Table</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="periodicTool" class="tool-content">
+
+            <h2>Periodic Table</h2>
+
+            <p>
+              Click an element to see its symbol, name, and atomic number.
+            </p>
+
+            <div id="elementInfo" class="tool-result">
+              Select an element.
+            </div>
+
+            <br>
+
+            <div class="periodic-wrapper">
+              <div id="periodicTable" class="periodic-table"></div>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- STOPWATCH -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('stopwatchTool', this)"
+          >
+            <span>⏱️ Stopwatch</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="stopwatchTool" class="tool-content">
+
+            <h2>Stopwatch</h2>
+
+            <div id="stopwatchDisplay" class="tool-result">
+              00:00:00.00
+            </div>
+
+            <br>
+
+            <button onclick="startStopwatch()">Start</button>
+            <button onclick="stopStopwatch()">Stop</button>
+            <button onclick="resetStopwatch()">Reset</button>
+
+          </div>
+
+        </div>
+
+
+        <!-- COUNTDOWN -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('countdownTool', this)"
+          >
+            <span>⏳ Countdown Timer</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="countdownTool" class="tool-content">
+
+            <h2>Countdown Timer</h2>
+
+            <input
+              id="countdownMinutes"
+              type="number"
+              min="0"
+              placeholder="Minutes"
+            >
+
+            <input
+              id="countdownSeconds"
+              type="number"
+              min="0"
+              max="59"
+              placeholder="Seconds"
+            >
+
+            <div id="countdownDisplay" class="tool-result">
+              00:00
+            </div>
+
+            <br>
+
+            <button onclick="startCountdown()">Start</button>
+            <button onclick="stopCountdown()">Stop</button>
+            <button onclick="resetCountdown()">Reset</button>
+
+          </div>
+
+        </div>
+
+
+        <!-- RANDOM NUMBER -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('randomNumberTool', this)"
+          >
+            <span>🎲 Random Number</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="randomNumberTool" class="tool-content">
+
+            <h2>Random Number</h2>
+
+            <input id="randomMin" type="number" placeholder="Minimum">
+
+            <input id="randomMax" type="number" placeholder="Maximum">
+
+            <button onclick="randomNumber()">
+              Generate
+            </button>
+
+            <div id="randomNumberResult" class="tool-result"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- RANDOM CHOICE -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('randomChoiceTool', this)"
+          >
+            <span>🎯 Random Choice Picker</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="randomChoiceTool" class="tool-content">
+
+            <h2>Random Choice Picker</h2>
+
+            <input
+              id="choicesInput"
+              placeholder="Pizza, Burger, Tacos"
+            >
+
+            <button onclick="randomChoice()">
+              Pick
+            </button>
+
+            <div id="choiceResult" class="tool-result"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- PERCENTAGE -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('percentageTool', this)"
+          >
+            <span>📊 Percentage Calculator</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="percentageTool" class="tool-content">
+
+            <h2>Percentage Calculator</h2>
+
+            <input
+              id="percentNumber"
+              type="number"
+              placeholder="Number"
+            >
+
+            <input
+              id="percentValue"
+              type="number"
+              placeholder="Percent"
+            >
+
+            <button onclick="calculatePercentage()">
+              Calculate
+            </button>
+
+            <div id="percentageResult" class="tool-result"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- FRACTION -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('fractionTool', this)"
+          >
+            <span>➗ Fraction Calculator</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="fractionTool" class="tool-content">
+
+            <h2>Fraction Calculator</h2>
+
+            <input
+              id="fractionA"
+              placeholder="Example: 1/2"
+            >
+
+            <input
+              id="fractionB"
+              placeholder="Example: 3/4"
+            >
+
+            <select id="fractionOperation">
+              <option value="+">Add</option>
+              <option value="-">Subtract</option>
+              <option value="*">Multiply</option>
+              <option value="/">Divide</option>
+            </select>
+
+            <button onclick="calculateFraction()">
+              Calculate
+            </button>
+
+            <div id="fractionResult" class="tool-result"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- BINARY -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('binaryTool', this)"
+          >
+            <span>🔢 Binary Converter</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="binaryTool" class="tool-content">
+
+            <h2>Binary Converter</h2>
+
+            <input
+              id="binaryInput"
+              placeholder="Decimal or binary"
+            >
+
+            <button onclick="convertBinary()">
+              Convert
+            </button>
+
+            <div id="binaryResult" class="tool-result"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('passwordTool', this)"
+          >
+            <span>🔐 Password Generator</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="passwordTool" class="tool-content">
+
+            <h2>Password Generator</h2>
+
+            <input
+              id="passwordLength"
+              type="number"
+              min="4"
+              max="100"
+              value="16"
+              placeholder="Length"
+            >
+
+            <button onclick="generatePassword()">
+              Generate
+            </button>
+
+            <div id="passwordResult" class="tool-result"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- UNIT CONVERTER -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('unitTool', this)"
+          >
+            <span>📐 Unit Converter</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="unitTool" class="tool-content">
+
+            <h2>Unit Converter</h2>
+
+            <input
+              id="unitValue"
+              type="number"
+              placeholder="Value"
+            >
+
+            <select id="unitType">
+
+              <option value="m-ft">
+                Meters → Feet
+              </option>
+
+              <option value="ft-m">
+                Feet → Meters
+              </option>
+
+              <option value="km-mi">
+                Kilometers → Miles
+              </option>
+
+              <option value="mi-km">
+                Miles → Kilometers
+              </option>
+
+              <option value="kg-lb">
+                Kilograms → Pounds
+              </option>
+
+              <option value="lb-kg">
+                Pounds → Kilograms
+              </option>
+
+              <option value="c-f">
+                Celsius → Fahrenheit
+              </option>
+
+              <option value="f-c">
+                Fahrenheit → Celsius
+              </option>
+
+            </select>
+
+            <button onclick="convertUnit()">
+              Convert
+            </button>
+
+            <div id="unitResult" class="tool-result"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- PRIME -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('primeTool', this)"
+          >
+            <span>🔬 Prime Number Checker</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="primeTool" class="tool-content">
+
+            <h2>Prime Number Checker</h2>
+
+            <input
+              id="primeInput"
+              type="number"
+              placeholder="Enter a number"
+            >
+
+            <button onclick="checkPrime()">
+              Check
+            </button>
+
+            <div id="primeResult" class="tool-result"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- PYTHAGOREAN -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('pythagoreanTool', this)"
+          >
+            <span>📐 Pythagorean Theorem</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="pythagoreanTool" class="tool-content">
+
+            <h2>Pythagorean Theorem</h2>
+
+            <p>Find the hypotenuse from two sides.</p>
+
+            <input
+              id="sideA"
+              type="number"
+              placeholder="Side A"
+            >
+
+            <input
+              id="sideB"
+              type="number"
+              placeholder="Side B"
+            >
+
+            <button onclick="calculatePythagorean()">
+              Calculate
+            </button>
+
+            <div id="pythagoreanResult" class="tool-result"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- TEXT COUNTER -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('textCounterTool', this)"
+          >
+            <span>📝 Text Counter</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="textCounterTool" class="tool-content">
+
+            <h2>Text Counter</h2>
+
+            <textarea
+              id="counterText"
+              rows="6"
+              placeholder="Type or paste text..."
+            ></textarea>
+
+            <button onclick="countText()">
+              Count
+            </button>
+
+            <div id="textCounterResult" class="tool-result"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- CASE CONVERTER -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('caseTool', this)"
+          >
+            <span>🔤 Case Converter</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="caseTool" class="tool-content">
+
+            <h2>Case Converter</h2>
+
+            <textarea
+              id="caseText"
+              rows="5"
+              placeholder="Enter text..."
+            ></textarea>
+
+            <button onclick="convertUpper()">UPPERCASE</button>
+            <button onclick="convertLower()">lowercase</button>
+            <button onclick="convertTitle()">Title Case</button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div id="mathResources" class="resource-page">
+
+    <button class="resource-back" onclick="closeResourceCategory()">← Back to Resources</button>
+
+<div class="resource-category">
+
+      <h2>📚 Math Resources</h2>
+
+      <p>
+        9th–10th grade math reference material covering Algebra, Geometry, Algebra II,
+        functions, and common formulas.
+      </p>
+
+      <div class="tools-list">
+
+
+        <!-- ALGEBRA FORMULA SHEET -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('algebraFormulaTool', this)"
+          >
+            <span>📘 Algebra Formula Sheet</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="algebraFormulaTool" class="tool-content">
+
+            <h2>Algebra Formula Sheet</h2>
+
+            <p>Important formulas and identities commonly used in Algebra I and Algebra II.</p>
+
+            <div class="formula">Distributive Property: a(b + c) = ab + ac</div>
+
+            <div class="formula">Difference of Squares: a² − b² = (a − b)(a + b)</div>
+
+            <div class="formula">Perfect Square: a² + 2ab + b² = (a + b)²</div>
+
+            <div class="formula">Perfect Square: a² − 2ab + b² = (a − b)²</div>
+
+            <div class="formula">Slope: m = (y₂ − y₁) / (x₂ − x₁)</div>
+
+            <div class="formula">Slope-Intercept: y = mx + b</div>
+
+            <div class="formula">Point-Slope: y − y₁ = m(x − x₁)</div>
+
+            <div class="formula">Quadratic Formula: x = (−b ± √(b² − 4ac)) / 2a</div>
+
+            <div class="formula">Distance: d = √((x₂ − x₁)² + (y₂ − y₁)²)</div>
+
+            <div class="formula">Midpoint: ((x₁ + x₂)/2, (y₁ + y₂)/2)</div>
+
+          </div>
+
+        </div>
+
+
+        <!-- GEOMETRY FORMULA SHEET -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('geometryFormulaTool', this)"
+          >
+            <span>📐 Geometry Formula Sheet</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="geometryFormulaTool" class="tool-content">
+
+            <h2>Geometry Formula Sheet</h2>
+
+            <h3>2D Shapes</h3>
+
+            <div class="formula">Rectangle Area: A = lw</div>
+            <div class="formula">Rectangle Perimeter: P = 2l + 2w</div>
+            <div class="formula">Triangle Area: A = ½bh</div>
+            <div class="formula">Parallelogram Area: A = bh</div>
+            <div class="formula">Trapezoid Area: A = ½(b₁ + b₂)h</div>
+            <div class="formula">Circle Area: A = πr²</div>
+            <div class="formula">Circle Circumference: C = 2πr</div>
+
+            <h3>3D Shapes</h3>
+
+            <div class="formula">Rectangular Prism Volume: V = lwh</div>
+            <div class="formula">Cylinder Volume: V = πr²h</div>
+            <div class="formula">Sphere Volume: V = 4/3πr³</div>
+            <div class="formula">Cone Volume: V = 1/3πr²h</div>
+
+          </div>
+
+        </div>
+
+
+        <!-- EXPONENT RULES -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('exponentTool', this)"
+          >
+            <span>⚡ Exponent Rules</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="exponentTool" class="tool-content">
+
+            <h2>Exponent Rules</h2>
+
+            <p>These rules are essential for simplifying expressions with powers.</p>
+
+            <div class="formula">Product Rule: aᵐ · aⁿ = aᵐ⁺ⁿ</div>
+
+            <div class="formula">Quotient Rule: aᵐ / aⁿ = aᵐ⁻ⁿ</div>
+
+            <div class="formula">Power Rule: (aᵐ)ⁿ = aᵐⁿ</div>
+
+            <div class="formula">Zero Exponent: a⁰ = 1</div>
+
+            <div class="formula">Negative Exponent: a⁻ⁿ = 1/aⁿ</div>
+
+            <div class="formula">Power of a Product: (ab)ⁿ = aⁿbⁿ</div>
+
+            <div class="formula">Power of a Quotient: (a/b)ⁿ = aⁿ/bⁿ</div>
+
+            <div class="example">
+              <strong>Example:</strong><br>
+              x³ · x⁴ = x⁷
+            </div>
+
+            <div class="example">
+              <strong>Example:</strong><br>
+              x⁸ / x³ = x⁵
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- FACTORING GUIDE -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('factoringTool', this)"
+          >
+            <span>✂️ Factoring Guide</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="factoringTool" class="tool-content">
+
+            <h2>Factoring Guide</h2>
+
+            <p>
+              Factoring rewrites an expression as a product of simpler expressions.
+            </p>
+
+            <h3>1. Greatest Common Factor</h3>
+
+            <div class="example">
+              <strong>Example:</strong><br>
+              6x² + 9x<br><br>
+              GCF = 3x<br>
+              = 3x(2x + 3)
+            </div>
+
+            <h3>2. Difference of Squares</h3>
+
+            <div class="formula">a² − b² = (a − b)(a + b)</div>
+
+            <div class="example">
+              <strong>Example:</strong><br>
+              x² − 25 = (x − 5)(x + 5)
+            </div>
+
+            <h3>3. Trinomials</h3>
+
+            <div class="example">
+              <strong>Example:</strong><br>
+              x² + 5x + 6<br><br>
+              Find two numbers that multiply to 6 and add to 5.<br>
+              2 and 3.<br><br>
+              Answer: (x + 2)(x + 3)
+            </div>
+
+            <h3>4. Grouping</h3>
+
+            <div class="example">
+              <strong>Example:</strong><br>
+              ax + ay + bx + by<br>
+              = a(x + y) + b(x + y)<br>
+              = (a + b)(x + y)
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- QUADRATIC FORMULA -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('quadraticTool', this)"
+          >
+            <span>🧮 Quadratic Formula Reference</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="quadraticTool" class="tool-content">
+
+            <h2>Quadratic Formula</h2>
+
+            <p>
+              For a quadratic equation written as ax² + bx + c = 0:
+            </p>
+
+            <div class="formula">
+              x = (−b ± √(b² − 4ac)) / 2a
+            </div>
+
+            <h3>Discriminant</h3>
+
+            <div class="formula">
+              D = b² − 4ac
+            </div>
+
+            <ul>
+              <li><strong>D &gt; 0:</strong> Two real solutions</li>
+              <li><strong>D = 0:</strong> One real solution</li>
+              <li><strong>D &lt; 0:</strong> No real solutions</li>
+            </ul>
+
+            <div class="example">
+              <strong>Example:</strong><br>
+              x² − 5x + 6 = 0<br><br>
+              a = 1, b = −5, c = 6<br>
+              x = (5 ± √25 − 24) / 2<br>
+              x = (5 ± 1) / 2<br><br>
+              Solutions: x = 3 and x = 2
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- FUNCTIONS -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('functionsTool', this)"
+          >
+            <span>📈 Functions Reference</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="functionsTool" class="tool-content">
+
+            <h2>Functions Reference</h2>
+
+            <p>
+              A function assigns exactly one output to each input in its domain.
+            </p>
+
+            <div class="formula">f(x) = expression involving x</div>
+
+            <h3>Common Function Types</h3>
+
+            <ul>
+              <li><strong>Linear:</strong> f(x) = mx + b</li>
+              <li><strong>Quadratic:</strong> f(x) = ax² + bx + c</li>
+              <li><strong>Exponential:</strong> f(x) = abˣ</li>
+              <li><strong>Absolute Value:</strong> f(x) = |x|</li>
+              <li><strong>Square Root:</strong> f(x) = √x</li>
+              <li><strong>Rational:</strong> f(x) = p(x) / q(x)</li>
+            </ul>
+
+            <h3>Domain and Range</h3>
+
+            <div class="math-box">
+              <strong>Domain</strong> = all allowed input values, usually x-values.
+              <br>
+              <strong>Range</strong> = all possible output values, usually y-values.
+            </div>
+
+            <h3>Function Notation</h3>
+
+            <div class="example">
+              <strong>Example:</strong><br>
+              f(x) = 2x + 3<br><br>
+              f(4) = 2(4) + 3<br>
+              f(4) = 11
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- SLOPE AND LINEAR EQUATIONS -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('linearTool', this)"
+          >
+            <span>📉 Slope & Linear Equations</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="linearTool" class="tool-content">
+
+            <h2>Slope & Linear Equations</h2>
+
+            <div class="formula">
+              m = (y₂ − y₁) / (x₂ − x₁)
+            </div>
+
+            <h3>Slope Types</h3>
+
+            <ul>
+              <li><strong>Positive:</strong> line rises from left to right.</li>
+              <li><strong>Negative:</strong> line falls from left to right.</li>
+              <li><strong>Zero:</strong> horizontal line.</li>
+              <li><strong>Undefined:</strong> vertical line.</li>
+            </ul>
+
+            <h3>Slope-Intercept Form</h3>
+
+            <div class="formula">
+              y = mx + b
+            </div>
+
+            <p>
+              <strong>m</strong> is the slope and <strong>b</strong> is the y-intercept.
+            </p>
+
+            <div class="example">
+              <strong>Example:</strong><br>
+              y = 3x + 2<br><br>
+              Slope = 3<br>
+              Y-intercept = 2
+            </div>
+
+            <h3>Parallel and Perpendicular Lines</h3>
+
+            <ul>
+              <li>Parallel lines have the same slope.</li>
+              <li>Perpendicular lines have slopes that are negative reciprocals.</li>
+            </ul>
+
+          </div>
+
+        </div>
+
+
+        <!-- SYSTEMS -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('systemsTool', this)"
+          >
+            <span>🔀 Systems of Equations</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="systemsTool" class="tool-content">
+
+            <h2>Systems of Equations</h2>
+
+            <p>
+              A system contains two or more equations that must be true at the same time.
+            </p>
+
+            <h3>Substitution</h3>
+
+            <div class="math-box">
+              Solve one equation for one variable, then substitute that expression
+              into the other equation.
+            </div>
+
+            <h3>Elimination</h3>
+
+            <div class="math-box">
+              Add or subtract equations so that one variable cancels.
+            </div>
+
+            <div class="example">
+              <strong>Example:</strong><br>
+              x + y = 10<br>
+              x − y = 2<br><br>
+              Add the equations:<br>
+              2x = 12<br>
+              x = 6<br><br>
+              Substitute:<br>
+              6 + y = 10<br>
+              y = 4<br><br>
+              Solution: (6, 4)
+            </div>
+
+            <h3>Possible Solutions</h3>
+
+            <ul>
+              <li><strong>One solution:</strong> lines intersect once.</li>
+              <li><strong>No solution:</strong> parallel lines.</li>
+              <li><strong>Infinitely many:</strong> same line.</li>
+            </ul>
+
+          </div>
+
+        </div>
+
+
+        <!-- TRIANGLES AND ANGLES -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('triangleTool', this)"
+          >
+            <span>🔺 Triangle & Angle Rules</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="triangleTool" class="tool-content">
+
+            <h2>Triangle & Angle Rules</h2>
+
+            <h3>Triangle Angle Sum</h3>
+
+            <div class="formula">
+              A + B + C = 180°
+            </div>
+
+            <h3>Exterior Angle Theorem</h3>
+
+            <div class="math-box">
+              An exterior angle equals the sum of the two remote interior angles.
+            </div>
+
+            <h3>Types of Triangles</h3>
+
+            <ul>
+              <li><strong>Equilateral:</strong> 3 equal sides and 3 angles of 60°.</li>
+              <li><strong>Isosceles:</strong> at least 2 equal sides.</li>
+              <li><strong>Scalene:</strong> no equal sides.</li>
+              <li><strong>Right:</strong> one 90° angle.</li>
+              <li><strong>Acute:</strong> all angles less than 90°.</li>
+              <li><strong>Obtuse:</strong> one angle greater than 90°.</li>
+            </ul>
+
+            <h3>Special Angle Relationships</h3>
+
+            <ul>
+              <li><strong>Complementary:</strong> sum is 90°.</li>
+              <li><strong>Supplementary:</strong> sum is 180°.</li>
+              <li><strong>Vertical angles:</strong> congruent.</li>
+              <li><strong>Linear pair:</strong> supplementary.</li>
+            </ul>
+
+          </div>
+
+        </div>
+
+
+        <!-- COORDINATE GEOMETRY -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('coordinateTool', this)"
+          >
+            <span>📍 Coordinate Geometry</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="coordinateTool" class="tool-content">
+
+            <h2>Coordinate Geometry</h2>
+
+            <h3>Slope</h3>
+
+            <div class="formula">
+              m = (y₂ − y₁) / (x₂ − x₁)
+            </div>
+
+            <h3>Distance Formula</h3>
+
+            <div class="formula">
+              d = √((x₂ − x₁)² + (y₂ − y₁)²)
+            </div>
+
+            <h3>Midpoint Formula</h3>
+
+            <div class="formula">
+              M = ((x₁ + x₂)/2, (y₁ + y₂)/2)
+            </div>
+
+            <div class="example">
+              <strong>Example:</strong><br>
+              Find the midpoint of (2, 4) and (8, 10).<br><br>
+              M = ((2 + 8)/2, (4 + 10)/2)<br>
+              M = (5, 7)
+            </div>
+
+            <h3>Quadrants</h3>
+
+            <ul>
+              <li>Quadrant I: (+, +)</li>
+              <li>Quadrant II: (−, +)</li>
+              <li>Quadrant III: (−, −)</li>
+              <li>Quadrant IV: (+, −)</li>
+            </ul>
+
+          </div>
+
+        </div>
+
+
+        <!-- COMMON MATH SYMBOLS -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('symbolsTool', this)"
+          >
+            <span>🔣 Common Math Symbols</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="symbolsTool" class="tool-content">
+
+            <h2>Common Math Symbols</h2>
+
+            <div class="symbol-grid">
+
+              <div class="symbol-card">
+                <strong>π</strong> Pi
+              </div>
+
+              <div class="symbol-card">
+                <strong>√</strong> Square root
+              </div>
+
+              <div class="symbol-card">
+                <strong>∞</strong> Infinity
+              </div>
+
+              <div class="symbol-card">
+                <strong>≈</strong> Approximately equal
+              </div>
+
+              <div class="symbol-card">
+                <strong>≠</strong> Not equal
+              </div>
+
+              <div class="symbol-card">
+                <strong>≤</strong> Less than or equal
+              </div>
+
+              <div class="symbol-card">
+                <strong>≥</strong> Greater than or equal
+              </div>
+
+              <div class="symbol-card">
+                <strong>±</strong> Plus or minus
+              </div>
+
+              <div class="symbol-card">
+                <strong>Δ</strong> Change / difference
+              </div>
+
+              <div class="symbol-card">
+                <strong>∑</strong> Summation
+              </div>
+
+              <div class="symbol-card">
+                <strong>∈</strong> Is an element of
+              </div>
+
+              <div class="symbol-card">
+                <strong>∴</strong> Therefore
+              </div>
+
+              <div class="symbol-card">
+                <strong>⊥</strong> Perpendicular
+              </div>
+
+              <div class="symbol-card">
+                <strong>∥</strong> Parallel
+              </div>
+
+              <div class="symbol-card">
+                <strong>≅</strong> Congruent
+              </div>
+
+              <div class="symbol-card">
+                <strong>∝</strong> Proportional to
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- MATH GLOSSARY -->
+
+        <div class="tool-item">
+
+          <button
+            class="tool-accordion"
+            onclick="toggleTool('glossaryTool', this)"
+          >
+            <span>📖 Math Glossary</span>
+            <span class="tool-arrow">▶</span>
+          </button>
+
+          <div id="glossaryTool" class="tool-content">
+
+            <h2>Math Glossary</h2>
+
+            <div class="math-box">
+              <strong>Coefficient:</strong>
+              A number multiplied by a variable.
+              Example: 5x → 5 is the coefficient.
+            </div>
+
+            <div class="math-box">
+              <strong>Constant:</strong>
+              A number without a variable.
+            </div>
+
+            <div class="math-box">
+              <strong>Variable:</strong>
+              A symbol representing an unknown or changing value.
+            </div>
+
+            <div class="math-box">
+              <strong>Expression:</strong>
+              A combination of numbers, variables, and operations without an equals sign.
+            </div>
+
+            <div class="math-box">
+              <strong>Equation:</strong>
+              A mathematical statement showing that two expressions are equal.
+            </div>
+
+            <div class="math-box">
+              <strong>Polynomial:</strong>
+              An expression made from variables and non-negative integer powers.
+            </div>
+
+            <div class="math-box">
+              <strong>Function:</strong>
+              A relation where every input has exactly one output.
+            </div>
+
+            <div class="math-box">
+              <strong>Domain:</strong>
+              The set of possible input values.
+            </div>
+
+            <div class="math-box">
+              <strong>Range:</strong>
+              The set of possible output values.
+            </div>
+
+            <div class="math-box">
+              <strong>Intercept:</strong>
+              A point where a graph crosses an axis.
+            </div>
+
+            <div class="math-box">
+              <strong>Vertex:</strong>
+              The highest or lowest point of a parabola.
+            </div>
+
+            <div class="math-box">
+              <strong>Congruent:</strong>
+              Same size and shape.
+            </div>
+
+            <div class="math-box">
+              <strong>Similar:</strong>
+              Same shape but potentially different size.
+            </div>
+
+            <div class="math-box">
+              <strong>Hypotenuse:</strong>
+              The side opposite the right angle in a right triangle.
+            </div>
+
+            <div class="math-box">
+              <strong>Radical:</strong>
+              An expression involving a root, such as √x.
+            </div>
+
+            <div class="math-box">
+              <strong>Factor:</strong>
+              A number or expression multiplied by another to produce a product.
+            </div>
+
+            <div class="math-box">
+              <strong>Quadratic:</strong>
+              A polynomial equation with degree 2.
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     CALCULATOR
+========================= -->
+
+<section id="calculator" class="section">
+
+  <div class="hero">
+
+    <h1>Scientific Calculator</h1>
+
+    <p>
+      TI-30XIIS-inspired scientific calculator.
+    </p>
+
+    <div class="calculator">
+
+      <div class="calc-top">
+
+        <button onclick="toggleAngleMode()">
+          <span id="angleMode">DEG</span>
+        </button>
+
+        <button onclick="toggleSecond()">
+          2nd
+        </button>
+
+        <button onclick="memoryClear()">
+          MC
+        </button>
+
+        <button onclick="memoryRecall()">
+          MR
+        </button>
+
+        <button onclick="memoryAdd()">
+          M+
+        </button>
+
+        <button onclick="memorySubtract()">
+          M−
+        </button>
+
+      </div>
+
+      <input id="display" type="text">
+
+      <div class="calc-buttons">
+
+        <button onclick="deleteLast()">DEL</button>
+        <button onclick="clearCalc()">CLEAR</button>
+        <button onclick="add('(')">(</button>
+        <button onclick="add(')')">)</button>
+        <button onclick="add('/')">÷</button>
+
+        <button onclick="scientific('sin')">sin</button>
+        <button onclick="scientific('cos')">cos</button>
+        <button onclick="scientific('tan')">tan</button>
+        <button onclick="scientific('asin')">sin⁻¹</button>
+        <button onclick="scientific('acos')">cos⁻¹</button>
+
+        <button onclick="scientific('atan')">tan⁻¹</button>
+        <button onclick="scientific('ln')">ln</button>
+        <button onclick="scientific('log')">log</button>
+        <button onclick="scientific('sqrt')">√</button>
+        <button onclick="scientific('cbrt')">∛</button>
+
+        <button onclick="add('7')">7</button>
+        <button onclick="add('8')">8</button>
+        <button onclick="add('9')">9</button>
+        <button onclick="add('*')">×</button>
+        <button onclick="scientific('square')">x²</button>
+
+        <button onclick="add('4')">4</button>
+        <button onclick="add('5')">5</button>
+        <button onclick="add('6')">6</button>
+        <button onclick="add('-')">−</button>
+        <button onclick="scientific('power')">xʸ</button>
+
+        <button onclick="add('1')">1</button>
+        <button onclick="add('2')">2</button>
+        <button onclick="add('3')">3</button>
+        <button onclick="add('+')">+</button>
+        <button onclick="scientific('reciprocal')">1/x</button>
+
+        <button onclick="add('0')">0</button>
+        <button onclick="add('.')">.</button>
+        <button onclick="add('π')">π</button>
+        <button onclick="add('e')">e</button>
+        <button onclick="calculate()" class="equals">=</button>
+
+        <button onclick="scientific('factorial')">x!</button>
+        <button onclick="scientific('percent')">%</button>
+        <button onclick="scientific('abs')">abs</button>
+        <button onclick="scientific('ncr')">nCr</button>
+        <button onclick="scientific('npr')">nPr</button>
+
+        <button onclick="randomCalc()">rand</button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     PROJECTS
+========================= -->
+
+<section id="projects" class="section">
+
+  <div class="hero">
+
+    <h1>Nothing to see here.</h1>
+
+    <p>
+      Enter the project key to access private projects.
+    </p>
+
+    <div class="unlock-box">
+
+      <h2>Private Projects</h2>
+
+      <p style="margin:12px 0 20px;color:#69737d;">
+        Enter your project key to continue.
+      </p>
+
+      <input
+        id="keyInput"
+        type="password"
+        placeholder="Enter key"
+      >
+
+      <button onclick="unlockProjects()">
+        Unlock
+      </button>
+
+      <div id="message"></div>
+
+    </div>
+
+  </div>
+
+
+  <div id="privateProjects" class="private">
+
+    <div class="hero">
+
+      <h1>Nothing to see here.</h1>
+
+      <p>Your unlocked projects.</p>
+
+    </div>
+
+    <div class="grid">
+
+      <div class="card project-card">
+
+        <div>
+          <h2>Project One</h2>
+          <p>Nothing to see here.</p>
+        </div>
+
+        <button onclick="openProject('projects/project1.html')">
+          Open
+        </button>
+
+      </div>
+
+      <div class="card project-card">
+
+        <div>
+          <h2>Project Two</h2>
+          <p>Nothing to see here.</p>
+        </div>
+
+        <button onclick="openProject('projects/project2.html')">
+          Open
+        </button>
+
+      </div>
+
+      <div class="card project-card">
+
+        <div>
+          <h2>Project Three</h2>
+          <p>Nothing to see here.</p>
+        </div>
+
+        <button onclick="openProject('projects/project3.html')">
+          Open
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  CogniBytes · Personal Projects
+</footer>
+
+
+<script>
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showSection(section) {
+  document
+    .querySelectorAll('.section')
+    .forEach(function(s) {
+      s.classList.remove('active');
+    });
+
+  const selected = document.getElementById(section);
+
+  if (selected) {
+    selected.classList.remove('active');
+    void selected.offsetWidth;
+    selected.classList.add('active');
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+
+  if (section === 'resources') {
+    closeResourceCategory();
+  }
+}
+
+
+function showResourceCategory(category) {
+  const categories = document.getElementById("resourceCategories");
+
+  if (categories) {
+    categories.style.display = "none";
+  }
+
+  document.querySelectorAll(".resource-page").forEach(function(page) {
+    page.classList.remove("active");
+  });
+
+  const selected = document.getElementById(category);
+
+  if (selected) {
+    selected.classList.remove("active");
+    void selected.offsetWidth;
+    selected.classList.add("active");
+  }
+
+  closeAllTools();
+}
+
+function closeResourceCategory() {
+  const categories = document.getElementById("resourceCategories");
+
+  if (categories) {
+    categories.style.display = "grid";
+  }
+
+  document.querySelectorAll(".resource-page").forEach(function(page) {
+    page.classList.remove("active");
+  });
+
+  closeAllTools();
+}
+
+
+/* =========================
+   COLLAPSIBLE TOOLS
+========================= */
+
+function toggleTool(id, button) {
+
+  const panel = document.getElementById(id);
+  const alreadyOpen = panel.classList.contains('open');
+
+  document
+    .querySelectorAll('.tool-content')
+    .forEach(function(content) {
+      content.classList.remove('open');
+    });
+
+  document
+    .querySelectorAll('.tool-accordion')
+    .forEach(function(btn) {
+      btn.classList.remove('open');
+    });
+
+  if (!alreadyOpen) {
+    panel.classList.add('open');
+    button.classList.add('open');
+  }
+}
+
+function closeAllTools() {
+
+  document
+    .querySelectorAll('.tool-content')
+    .forEach(function(content) {
+      content.classList.remove('open');
+    });
+
+  document
+    .querySelectorAll('.tool-accordion')
+    .forEach(function(button) {
+      button.classList.remove('open');
+    });
+}
+
+
+/* =========================
+   PERIODIC TABLE
+========================= */
+
+const elements = [
+["H","Hydrogen",1,1,1],
+["He","Helium",2,18,1],
+["Li","Lithium",3,1,2],
+["Be","Beryllium",4,2,2],
+["B","Boron",5,13,2],
+["C","Carbon",6,14,2],
+["N","Nitrogen",7,15,2],
+["O","Oxygen",8,16,2],
+["F","Fluorine",9,17,2],
+["Ne","Neon",10,18,2],
+["Na","Sodium",11,1,3],
+["Mg","Magnesium",12,2,3],
+["Al","Aluminum",13,13,3],
+["Si","Silicon",14,14,3],
+["P","Phosphorus",15,15,3],
+["S","Sulfur",16,16,3],
+["Cl","Chlorine",17,17,3],
+["Ar","Argon",18,18,3],
+["K","Potassium",19,1,4],
+["Ca","Calcium",20,2,4],
+["Sc","Scandium",21,3,4],
+["Ti","Titanium",22,4,4],
+["V","Vanadium",23,5,4],
+["Cr","Chromium",24,6,4],
+["Mn","Manganese",25,7,4],
+["Fe","Iron",26,8,4],
+["Co","Cobalt",27,9,4],
+["Ni","Nickel",28,10,4],
+["Cu","Copper",29,11,4],
+["Zn","Zinc",30,12,4],
+["Ga","Gallium",31,13,4],
+["Ge","Germanium",32,14,4],
+["As","Arsenic",33,15,4],
+["Se","Selenium",34,16,4],
+["Br","Bromine",35,17,4],
+["Kr","Krypton",36,18,4],
+["Rb","Rubidium",37,1,5],
+["Sr","Strontium",38,2,5],
+["Y","Yttrium",39,3,5],
+["Zr","Zirconium",40,4,5],
+["Nb","Niobium",41,5,5],
+["Mo","Molybdenum",42,6,5],
+["Tc","Technetium",43,7,5],
+["Ru","Ruthenium",44,8,5],
+["Rh","Rhodium",45,9,5],
+["Pd","Palladium",46,10,5],
+["Ag","Silver",47,11,5],
+["Cd","Cadmium",48,12,5],
+["In","Indium",49,13,5],
+["Sn","Tin",50,14,5],
+["Sb","Antimony",51,15,5],
+["Te","Tellurium",52,16,5],
+["I","Iodine",53,17,5],
+["Xe","Xenon",54,18,5],
+["Cs","Cesium",55,1,6],
+["Ba","Barium",56,2,6],
+["La","Lanthanum",57,3,6],
+["Ce","Cerium",58,4,8],
+["Pr","Praseodymium",59,5,8],
+["Nd","Neodymium",60,6,8],
+["Pm","Promethium",61,7,8],
+["Sm","Samarium",62,8,8],
+["Eu","Europium",63,9,8],
+["Gd","Gadolinium",64,10,8],
+["Tb","Terbium",65,11,8],
+["Dy","Dysprosium",66,12,8],
+["Ho","Holmium",67,13,8],
+["Er","Erbium",68,14,8],
+["Tm","Thulium",69,15,8],
+["Yb","Ytterbium",70,16,8],
+["Lu","Lutetium",71,17,8],
+["Hf","Hafnium",72,4,6],
+["Ta","Tantalum",73,5,6],
+["W","Tungsten",74,6,6],
+["Re","Rhenium",75,7,6],
+["Os","Osmium",76,8,6],
+["Ir","Iridium",77,9,6],
+["Pt","Platinum",78,10,6],
+["Au","Gold",79,11,6],
+["Hg","Mercury",80,12,6],
+["Tl","Thallium",81,13,6],
+["Pb","Lead",82,14,6],
+["Bi","Bismuth",83,15,6],
+["Po","Polonium",84,16,6],
+["At","Astatine",85,17,6],
+["Rn","Radon",86,18,6],
+["Fr","Francium",87,1,7],
+["Ra","Radium",88,2,7],
+["Ac","Actinium",89,3,7],
+["Th","Thorium",90,4,9],
+["Pa","Protactinium",91,5,9],
+["U","Uranium",92,6,9],
+["Np","Neptunium",93,7,9],
+["Pu","Plutonium",94,8,9],
+["Am","Americium",95,9,9],
+["Cm","Curium",96,10,9],
+["Bk","Berkelium",97,11,9],
+["Cf","Californium",98,12,9],
+["Es","Einsteinium",99,13,9],
+["Fm","Fermium",100,14,9],
+["Md","Mendelevium",101,15,9],
+["No","Nobelium",102,16,9],
+["Lr","Lawrencium",103,17,9],
+["Rf","Rutherfordium",104,4,7],
+["Db","Dubnium",105,5,7],
+["Sg","Seaborgium",106,6,7],
+["Bh","Bohrium",107,7,7],
+["Hs","Hassium",108,8,7],
+["Mt","Meitnerium",109,9,7],
+["Ds","Darmstadtium",110,10,7],
+["Rg","Roentgenium",111,11,7],
+["Cn","Copernicium",112,12,7],
+["Nh","Nihonium",113,13,7],
+["Fl","Flerovium",114,14,7],
+["Mc","Moscovium",115,15,7],
+["Lv","Livermorium",116,16,7],
+["Ts","Tennessine",117,17,7],
+["Og","Oganesson",118,18,7]
+];
+
+const periodicTable =
+  document.getElementById("periodicTable");
+
+elements.forEach(function(e) {
+
+  const el = document.createElement("div");
+
+  el.className = "element";
+
+  el.style.gridColumn = e[3];
+  el.style.gridRow = e[4];
+
+  el.innerHTML = `
+    <span class="number">${e[2]}</span>
+    <span class="symbol">${e[0]}</span>
+    <span class="name">${e[1]}</span>
+  `;
+
+  el.onclick = function() {
+
+    document.getElementById("elementInfo").innerHTML =
+      `<strong>${e[1]}</strong> —
+       Atomic Number: ${e[2]} —
+       Symbol: ${e[0]}`;
+
+  };
+
+  periodicTable.appendChild(el);
+
+});
+
+
+/* =========================
+   STOPWATCH
+========================= */
+
+let stopwatchInterval = null;
+let stopwatchStart = 0;
+let stopwatchElapsed = 0;
+
+function formatStopwatch(ms) {
+
+  const minutes =
+    Math.floor(ms / 60000);
+
+  const seconds =
+    Math.floor((ms % 60000) / 1000);
+
+  const centiseconds =
+    Math.floor((ms % 1000) / 10);
+
+  return (
+    String(minutes).padStart(2,"0") +
+    ":" +
+    String(seconds).padStart(2,"0") +
+    ":" +
+    String(centiseconds).padStart(2,"0")
+  );
+}
+
+function updateStopwatch() {
+
+  stopwatchElapsed =
+    Date.now() - stopwatchStart;
+
+  document.getElementById(
+    "stopwatchDisplay"
+  ).textContent =
+    formatStopwatch(stopwatchElapsed);
+}
+
+function startStopwatch() {
+
+  if (stopwatchInterval) return;
+
+  stopwatchStart =
+    Date.now() - stopwatchElapsed;
+
+  stopwatchInterval =
+    setInterval(updateStopwatch, 10);
+}
+
+function stopStopwatch() {
+
+  clearInterval(stopwatchInterval);
+  stopwatchInterval = null;
+}
+
+function resetStopwatch() {
+
+  stopStopwatch();
+
+  stopwatchElapsed = 0;
+
+  document.getElementById(
+    "stopwatchDisplay"
+  ).textContent =
+    "00:00:00.00";
+}
+
+
+/* =========================
+   COUNTDOWN
+========================= */
+
+let countdownInterval = null;
+let countdownSecondsLeft = 0;
+
+function updateCountdownDisplay() {
+
+  const minutes =
+    Math.floor(countdownSecondsLeft / 60);
+
+  const seconds =
+    countdownSecondsLeft % 60;
+
+  document.getElementById(
+    "countdownDisplay"
+  ).textContent =
+    String(minutes).padStart(2,"0") +
+    ":" +
+    String(seconds).padStart(2,"0");
+}
+
+function startCountdown() {
+
+  if (countdownInterval) return;
+
+  if (countdownSecondsLeft <= 0) {
+
+    const minutes =
+      Number(document.getElementById(
+        "countdownMinutes"
+      ).value) || 0;
+
+    const seconds =
+      Number(document.getElementById(
+        "countdownSeconds"
+      ).value) || 0;
+
+    countdownSecondsLeft =
+      minutes * 60 + seconds;
+  }
+
+  if (countdownSecondsLeft <= 0) return;
+
+  updateCountdownDisplay();
+
+  countdownInterval =
+    setInterval(function() {
+
+      countdownSecondsLeft--;
+
+      updateCountdownDisplay();
+
+      if (countdownSecondsLeft <= 0) {
+
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+
+        alert("Timer finished!");
+
+      }
+
+    }, 1000);
+}
+
+function stopCountdown() {
+
+  clearInterval(countdownInterval);
+  countdownInterval = null;
+}
+
+function resetCountdown() {
+
+  stopCountdown();
+
+  countdownSecondsLeft = 0;
+
+  document.getElementById(
+    "countdownDisplay"
+  ).textContent = "00:00";
+}
+
+
+/* =========================
+   RANDOM NUMBER
+========================= */
+
+function randomNumber() {
+
+  const min =
+    Number(document.getElementById("randomMin").value);
+
+  const max =
+    Number(document.getElementById("randomMax").value);
+
+  if (max < min) {
+
+    document.getElementById(
+      "randomNumberResult"
+    ).textContent =
+      "Maximum must be greater than or equal to minimum.";
+
+    return;
+  }
+
+  const result =
+    Math.floor(
+      Math.random() * (max - min + 1)
+    ) + min;
+
+  document.getElementById(
+    "randomNumberResult"
+  ).textContent = result;
+}
+
+
+/* =========================
+   RANDOM CHOICE
+========================= */
+
+function randomChoice() {
+
+  const choices =
+    document.getElementById(
+      "choicesInput"
+    ).value
+    .split(",")
+    .map(x => x.trim())
+    .filter(Boolean);
+
+  if (!choices.length) return;
+
+  const result =
+    choices[
+      Math.floor(Math.random() * choices.length)
+    ];
+
+  document.getElementById(
+    "choiceResult"
+  ).textContent = result;
+}
+
+
+/* =========================
+   PERCENTAGE
+========================= */
+
+function calculatePercentage() {
+
+  const number =
+    Number(document.getElementById(
+      "percentNumber"
+    ).value);
+
+  const percent =
+    Number(document.getElementById(
+      "percentValue"
+    ).value);
+
+  document.getElementById(
+    "percentageResult"
+  ).textContent =
+    number * percent / 100;
+}
+
+
+/* =========================
+   FRACTIONS
+========================= */
+
+function gcd(a,b) {
+
+  a = Math.abs(a);
+  b = Math.abs(b);
+
+  while (b) {
+
+    const temp = b;
+
+    b = a % b;
+    a = temp;
+  }
+
+  return a;
+}
+
+function parseFraction(value) {
+
+  value = value.trim();
+
+  if (value.includes("/")) {
+
+    const parts = value.split("/");
+
+    return {
+      n: Number(parts[0]),
+      d: Number(parts[1])
+    };
+
+  }
+
+  return {
+    n: Number(value),
+    d: 1
+  };
+}
+
+function simplifyFraction(n,d) {
+
+  if (d === 0) {
+    throw new Error("Division by zero");
+  }
+
+  const divisor = gcd(n,d);
+
+  n /= divisor;
+  d /= divisor;
+
+  if (d < 0) {
+    n *= -1;
+    d *= -1;
+  }
+
+  return `${n}/${d}`;
+}
+
+function calculateFraction() {
+
+  try {
+
+    const a =
+      parseFraction(
+        document.getElementById(
+          "fractionA"
+        ).value
+      );
+
+    const b =
+      parseFraction(
+        document.getElementById(
+          "fractionB"
+        ).value
+      );
+
+    let n;
+    let d;
+
+    const op =
+      document.getElementById(
+        "fractionOperation"
+      ).value;
+
+    if (op === "+") {
+      n = a.n*b.d + b.n*a.d;
+      d = a.d*b.d;
+    }
+
+    if (op === "-") {
+      n = a.n*b.d - b.n*a.d;
+      d = a.d*b.d;
+    }
+
+    if (op === "*") {
+      n = a.n*b.n;
+      d = a.d*b.d;
+    }
+
+    if (op === "/") {
+      n = a.n*b.d;
+      d = a.d*b.n;
+    }
+
+    document.getElementById(
+      "fractionResult"
+    ).textContent =
+      simplifyFraction(n,d);
+
+  } catch {
+
+    document.getElementById(
+      "fractionResult"
+    ).textContent =
+      "Invalid fraction.";
+
+  }
+}
+
+
+/* =========================
+   BINARY
+========================= */
+
+function convertBinary() {
+
+  const value =
+    document.getElementById(
+      "binaryInput"
+    ).value.trim();
+
+  if (!value) return;
+
+  let result;
+
+  if (/^[01]+$/.test(value)) {
+
+    result =
+      `${parseInt(value,2)} decimal`;
+
+  } else if (/^-?\d+$/.test(value)) {
+
+    result =
+      `${Number(value).toString(2)} binary`;
+
+  } else {
+
+    result = "Enter a valid decimal or binary number.";
+  }
+
+  document.getElementById(
+    "binaryResult"
+  ).textContent = result;
+}
+
+
+/* =========================
+   PASSWORD
+========================= */
+
+function generatePassword() {
+
+  let length =
+    Number(document.getElementById(
+      "passwordLength"
+    ).value);
+
+  length =
+    Math.max(4, Math.min(100, length));
+
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}";
+
+  let password = "";
+
+  for (let i = 0; i < length; i++) {
+
+    password +=
+      chars[
+        Math.floor(
+          Math.random() * chars.length
+        )
+      ];
+  }
+
+  document.getElementById(
+    "passwordResult"
+  ).textContent =
+    password;
+}
+
+
+/* =========================
+   UNIT CONVERTER
+========================= */
+
+function convertUnit() {
+
+  const value =
+    Number(document.getElementById(
+      "unitValue"
+    ).value);
+
+  const type =
+    document.getElementById(
+      "unitType"
+    ).value;
+
+  let result;
+
+  switch(type) {
+
+    case "m-ft":
+      result = value * 3.28084;
+      break;
+
+    case "ft-m":
+      result = value / 3.28084;
+      break;
+
+    case "km-mi":
+      result = value * 0.621371;
+      break;
+
+    case "mi-km":
+      result = value / 0.621371;
+      break;
+
+    case "kg-lb":
+      result = value * 2.20462;
+      break;
+
+    case "lb-kg":
+      result = value / 2.20462;
+      break;
+
+    case "c-f":
+      result = value * 9/5 + 32;
+      break;
+
+    case "f-c":
+      result = (value - 32) * 5/9;
+      break;
+  }
+
+  document.getElementById(
+    "unitResult"
+  ).textContent =
+    Number(result.toFixed(6));
+}
+
+
+/* =========================
+   PRIME
+========================= */
+
+function checkPrime() {
+
+  const n =
+    Number(document.getElementById(
+      "primeInput"
+    ).value);
+
+  let prime = true;
+
+  if (n < 2 || !Number.isInteger(n)) {
+    prime = false;
+  }
+
+  for (
+    let i = 2;
+    i <= Math.sqrt(n);
+    i++
+  ) {
+
+    if (n % i === 0) {
+      prime = false;
+      break;
+    }
+  }
+
+  document.getElementById(
+    "primeResult"
+  ).textContent =
+    prime
+      ? `${n} is prime.`
+      : `${n} is not prime.`;
+}
+
+
+/* =========================
+   PYTHAGOREAN
+========================= */
+
+function calculatePythagorean() {
+
+  const a =
+    Number(document.getElementById(
+      "sideA"
+    ).value);
+
+  const b =
+    Number(document.getElementById(
+      "sideB"
+    ).value);
+
+  if (a <= 0 || b <= 0) {
+
+    document.getElementById(
+      "pythagoreanResult"
+    ).textContent =
+      "Enter two positive sides.";
+
+    return;
+  }
+
+  const c =
+    Math.sqrt(a*a + b*b);
+
+  document.getElementById(
+    "pythagoreanResult"
+  ).textContent =
+    `Hypotenuse = ${c}`;
+}
+
+
+/* =========================
+   TEXT COUNTER
+========================= */
+
+function countText() {
+
+  const text =
+    document.getElementById(
+      "counterText"
+    ).value;
+
+  const chars = text.length;
+
+  const words =
+    text.trim()
+      ? text.trim().split(/\s+/).length
+      : 0;
+
+  const lines =
+    text
+      ? text.split(/\r?\n/).length
+      : 0;
+
+  document.getElementById(
+    "textCounterResult"
+  ).innerHTML =
+    `Characters: ${chars}<br>
+     Words: ${words}<br>
+     Lines: ${lines}`;
+}
+
+
+/* =========================
+   CASE CONVERTER
+========================= */
+
+function convertUpper() {
+
+  document.getElementById(
+    "caseText"
+  ).value =
+    document.getElementById(
+      "caseText"
+    ).value.toUpperCase();
+}
+
+function convertLower() {
+
+  document.getElementById(
+    "caseText"
+  ).value =
+    document.getElementById(
+      "caseText"
+    ).value.toLowerCase();
+}
+
+function convertTitle() {
+
+  document.getElementById(
+    "caseText"
+  ).value =
+    document.getElementById(
+      "caseText"
+    ).value
+    .toLowerCase()
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+
+/* =========================
+   SCIENTIFIC CALCULATOR
+========================= */
+
+let angleMode = "DEG";
+let secondMode = false;
+let memory = 0;
+
+function add(value) {
+
+  document.getElementById(
+    "display"
+  ).value += value;
+}
+
+function clearCalc() {
+
+  document.getElementById(
+    "display"
+  ).value = "";
+}
+
+function deleteLast() {
+
+  const display =
+    document.getElementById(
+      "display"
+    );
+
+  display.value =
+    display.value.slice(0,-1);
+}
+
+function toggleAngleMode() {
+
+  angleMode =
+    angleMode === "DEG"
+      ? "RAD"
+      : "DEG";
+
+  document.getElementById(
+    "angleMode"
+  ).textContent =
+    angleMode;
+}
+
+function toggleSecond() {
+
+  secondMode = !secondMode;
+}
+
+function toRadians(x) {
+
+  return angleMode === "DEG"
+    ? x * Math.PI / 180
+    : x;
+}
+
+function fromRadians(x) {
+
+  return angleMode === "DEG"
+    ? x * 180 / Math.PI
+    : x;
+}
+
+function factorial(n) {
+
+  n = Number(n);
+
+  if (n < 0 || !Number.isInteger(n)) {
+    throw new Error();
+  }
+
+  let result = 1;
+
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+
+  return result;
+}
+
+function nCr(n,r) {
+
+  return factorial(n) /
+    (factorial(r) * factorial(n-r));
+}
+
+function nPr(n,r) {
+
+  return factorial(n) /
+    factorial(n-r);
+}
+
+function calculate() {
+
+  const display =
+    document.getElementById(
+      "display"
+    );
+
+  try {
+
+    let expression =
+      display.value;
+
+    expression =
+      expression
+        .replace(/π/g, "Math.PI")
+        .replace(/\be\b/g, "Math.E")
+        .replace(/×/g, "*")
+        .replace(/÷/g, "/")
+        .replace(/−/g, "-")
+        .replace(/\^/g, "**");
+
+    if (
+      !/^[0-9+\-*/().\s*MathPIE]+$/.test(
+        expression
+      )
+    ) {
+      throw new Error();
+    }
+
+    display.value =
+      Function(
+        '"use strict"; return (' +
+        expression +
+        ')'
+      )();
+
+  } catch {
+
+    display.value = "Error";
+  }
+}
+
+function scientific(type) {
+
+  const display =
+    document.getElementById(
+      "display"
+    );
+
+  const value =
+    Number(display.value);
+
+  try {
+
+    let result;
+
+    if (type === "sin") {
+      result = Math.sin(toRadians(value));
+    }
+
+    else if (type === "cos") {
+      result = Math.cos(toRadians(value));
+    }
+
+    else if (type === "tan") {
+      result = Math.tan(toRadians(value));
+    }
+
+    else if (type === "asin") {
+      result = fromRadians(Math.asin(value));
+    }
+
+    else if (type === "acos") {
+      result = fromRadians(Math.acos(value));
+    }
+
+    else if (type === "atan") {
+      result = fromRadians(Math.atan(value));
+    }
+
+    else if (type === "ln") {
+      result = Math.log(value);
+    }
+
+    else if (type === "log") {
+      result = Math.log10(value);
+    }
+
+    else if (type === "sqrt") {
+      result = Math.sqrt(value);
+    }
+
+    else if (type === "cbrt") {
+      result = Math.cbrt(value);
+    }
+
+    else if (type === "square") {
+      result = value ** 2;
+    }
+
+    else if (type === "reciprocal") {
+      result = 1 / value;
+    }
+
+    else if (type === "factorial") {
+      result = factorial(value);
+    }
+
+    else if (type === "percent") {
+      result = value / 100;
+    }
+
+    else if (type === "abs") {
+      result = Math.abs(value);
+    }
+
+    else if (type === "power") {
+      const exponent =
+        Number(prompt("Enter exponent:"));
+
+      result = value ** exponent;
+    }
+
+    else if (type === "ncr") {
+      const r =
+        Number(prompt("Enter r:"));
+
+      result = nCr(value,r);
+    }
+
+    else if (type === "npr") {
+      const r =
+        Number(prompt("Enter r:"));
+
+      result = nPr(value,r);
+    }
+
+    display.value = result;
+
+  } catch {
+
+    display.value = "Error";
+  }
+}
+
+function randomCalc() {
+
+  document.getElementById(
+    "display"
+  ).value =
+    Math.random();
+}
+
+
+/* =========================
+   MEMORY
+========================= */
+
+function memoryClear() {
+  memory = 0;
+}
+
+function memoryRecall() {
+
+  document.getElementById(
+    "display"
+  ).value += memory;
+}
+
+function memoryAdd() {
+
+  memory +=
+    Number(
+      document.getElementById(
+        "display"
+      ).value
+    ) || 0;
+}
+
+function memorySubtract() {
+
+  memory -=
+    Number(
+      document.getElementById(
+        "display"
+      ).value
+    ) || 0;
+}
+
+
+/* =========================
+   CALCULATOR KEYBOARD
+========================= */
+
+document.addEventListener(
+  "keydown",
+  function(event) {
+
+    const active =
+      document.activeElement;
+
+    if (
+      active &&
+      active.id === "display"
+    ) {
+
+      if (event.key === "Enter") {
+        calculate();
+      }
+
+      if (event.key === "Escape") {
+        clearCalc();
+      }
+    }
+  }
+);
+
+
+/* =========================
+   PROJECT UNLOCK
+========================= */
+
+function unlockProjects() {
+
+  const key =
+    document.getElementById(
+      "keyInput"
+    ).value;
+
+  const message =
+    document.getElementById(
+      "message"
+    );
+
+  const privateProjects =
+    document.getElementById(
+      "privateProjects"
+    );
+
+  if (key === "0912") {
+
+    privateProjects
+      .classList
+      .add("unlocked");
+
+    message.textContent =
+      "Access granted.";
+
+    message.style.color =
+      "#16833a";
+
+  } else {
+
+    privateProjects
+      .classList
+      .remove("unlocked");
+
+    message.textContent =
+      "Incorrect key.";
+
+    message.style.color =
+      "#c62828";
+  }
+}
+
+
+/* =========================
+   OPEN PROJECT
+========================= */
+
+function openProject(page) {
+
+  window.location.href = page;
+}
+
+
+/* =========================
+   ENTER PROJECT KEY
+========================= */
+
+document
+  .getElementById("keyInput")
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Enter") {
+        unlockProjects();
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
