@@ -1,403 +1,135 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Project 1 - Games</title>
-
   <style>
-    \* {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #10151b;
-      color: white;
-      min-height: 100vh;
-    }
-
-    header {
-      height: 70px;
-      background: #17212b;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 30px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
-    }
-
-    .logo {
-      font-size: 22px;
-      font-weight: bold;
-    }
-
-    .back-button {
-      text-decoration: none;
-      color: white;
-      background: #2864d7;
-      padding: 10px 17px;
-      border-radius: 8px;
-      font-size: 14px;
-    }
-
-    .back-button\:hover {
-      background: #1f52b5;
-    }
-
-    main {
-      width: 94%;
-      max-width: 1400px;
-      margin: 30px auto;
-    }
-
-    .page-title {
-      margin-bottom: 25px;
-    }
-
-    .page-title h1 {
-      font-size: 34px;
-      margin-bottom: 7px;
-    }
-
-    .page-title p {
-      color: #aeb8c2;
-    }
-
-    .game-buttons {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-
-    .game-button {
-      border: none;
-      background: #222d38;
-      color: white;
-      padding: 12px 18px;
-      border-radius: 9px;
-      cursor: pointer;
-      font-size: 15px;
-      transition: 0.15s;
-    }
-
-    .game-button\:hover {
-      background: #304050;
-      transform: translateY(-1px);
-    }
-
-    .game-button.active {
-      background: #2864d7;
-    }
-
-    .game-card {
-      background: #17212b;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
-    }
-
-    .game-card h2 {
-      margin-bottom: 15px;
-      font-size: 22px;
-    }
-
-    .game-container {
-      width: 100%;
-      height: 720px;
-      background: #000;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .game-container iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
-    }
-
-    .fullscreen-button {
-      margin-top: 12px;
-      border: none;
-      background: #2864d7;
-      color: white;
-      padding: 11px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .fullscreen-button\:hover {
-      background: #1f52b5;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, Helvetica, sans-serif; background: #10151b; color: white; min-height: 100vh; }
+    header { height: 70px; background: #17212b; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; box-shadow: 0 2px 10px rgba(0,0,0,.35); }
+    .logo { font-size: 22px; font-weight: bold; }
+    .back-button { text-decoration: none; color: white; background: #2864d7; padding: 10px 17px; border-radius: 8px; font-size: 14px; }
+    .back-button:hover { background: #1f52b5; }
+    main { width: 94%; max-width: 1400px; margin: 30px auto; }
+    .page-title { margin-bottom: 25px; }
+    .page-title h1 { font-size: 34px; margin-bottom: 7px; }
+    .page-title p { color: #aeb8c2; }
+    .game-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; position: relative; z-index: 10; }
+    .game-button, .fullscreen-button { border: none; color: white; cursor: pointer; font-size: 15px; border-radius: 9px; }
+    .game-button { background: #222d38; padding: 12px 18px; }
+    .game-button:hover { background: #304050; transform: translateY(-1px); }
+    .game-button.active { background: #2864d7; }
+    .game-card { background: #17212b; border-radius: 15px; padding: 20px; box-shadow: 0 5px 25px rgba(0,0,0,.3); }
+    .game-card h2 { margin-bottom: 15px; font-size: 22px; }
+    .game-container { width: 100%; height: 720px; background: #000; border-radius: 10px; overflow: hidden; position: relative; }
+    .game-container iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .game-message { height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; color: #aeb8c2; padding: 30px; font-size: 17px; }
+    .fullscreen-button { margin-top: 12px; background: #2864d7; padding: 11px 18px; }
+    .fullscreen-button:hover { background: #1f52b5; }
+    .status { margin-top: 10px; color: #aeb8c2; font-size: 13px; min-height: 18px; }
     @media (max-width: 700px) {
-      header {
-        padding: 0 15px;
-      }
-
-      .logo {
-        font-size: 18px;
-      }
-
-      main {
-        width: 96%;
-        margin: 20px auto;
-      }
-
-      .page-title h1 {
-        font-size: 28px;
-      }
-
-      .game-card {
-        padding: 12px;
-      }
-
-      .game-container {
-        height: 600px;
-      }
-
-      .game-button {
-        font-size: 14px;
-        padding: 10px 14px;
-      }
+      header { padding: 0 15px; }
+      .logo { font-size: 18px; }
+      main { width: 96%; margin: 20px auto; }
+      .page-title h1 { font-size: 28px; }
+      .game-card { padding: 12px; }
+      .game-container { height: 600px; }
+      .game-button { font-size: 14px; padding: 10px 14px; }
     }
   </style>
-
 </head>
-
 <body>
-
   <header>
-    <div class="logo">
-      StudySpace
-    </div>
-
-
-<a href="../index.html" class="back-button">
-  ← Back
-</a>
-
-
+    <div class="logo">CogniBytes</div>
+    <a href="../index.html" class="back-button">← Back</a>
   </header>
 
   <main>
+    <div class="page-title">
+      <h1>Project 1</h1>
+      <p>Select a game to play</p>
+    </div>
 
+    <div class="game-buttons" id="game-buttons">
+      <button type="button" class="game-button active" data-game="btd5">🎈 Bloons TD 5</button>
+      <button type="button" class="game-button" data-game="driveMad">🚗 Drive Mad</button>
+      <button type="button" class="game-button" data-game="vex5">🏃 Vex 5</button>
+      <button type="button" class="game-button" data-game="ovo">🕹️ OvO</button>
+      <button type="button" class="game-button" data-game="bigTower">🗼 Big Tower Tiny Square</button>
+      <button type="button" class="game-button" data-game="stickmanHook">🪝 Stickman Hook</button>
+      <button type="button" class="game-button" data-game="blumgiSlime">🟢 Blumgi Slime</button>
+      <button type="button" class="game-button" data-game="blumgiMerge">🟣 Blumgi Merge</button>
+      <button type="button" class="game-button" data-game="bobTheRobber">🕵️ Bob the Robber</button>
+    </div>
 
-<div class="page-title">
-  <h1>Project 1</h1>
-  <p>Select a game to play</p>
-</div>
-
-<div class="game-buttons">
-
-  <!-- ORIGINAL WORKING GAMES -->
-
-  <button class="game-button active"
-    onclick="loadGame('btd5', this)">
-    🎈 Bloons TD 5
-  </button>
-
-  <button class="game-button"
-    onclick="loadGame('driveMad', this)">
-    🚗 Drive Mad
-  </button>
-
-  <button class="game-button"
-    onclick="loadGame('vex5', this)">
-    🏃 Vex 5
-  </button>
-
-  <button class="game-button"
-    onclick="loadGame('ovo', this)">
-    🕹️ OvO
-  </button>
-
-  <button class="game-button"
-    onclick="loadGame('bigTower', this)">
-    🗼 Big Tower Tiny Square
-  </button>
-
-  <button class="game-button"
-    onclick="loadGame('stickmanHook', this)">
-    🪝 Stickman Hook
-  </button>
-
-  <button class="game-button"
-    onclick="loadGame('blumgiSlime', this)">
-    🟢 Blumgi Slime
-  </button>
-
-  <button class="game-button"
-    onclick="loadGame('blumgiMerge', this)">
-    🟣 Blumgi Merge
-  </button>
-
-  <button class="game-button"
-    onclick="loadGame('bobTheRobber', this)">
-    🕵️ Bob the Robber
-  </button>
-
-
-
-</div>
-
-
-<div class="game-card">
-
-  <h2 id="game-title">Bloons TD 5</h2>
-
-  <div
-    class="game-container"
-    id="game-container">
-  </div>
-
-  <button
-    class="fullscreen-button"
-    onclick="fullscreenGame()">
-    ⛶ Fullscreen
-  </button>
-
-</div>
-
-
+    <div class="game-card">
+      <h2 id="game-title">Bloons TD 5</h2>
+      <div class="game-container" id="game-container">
+        <div class="game-message">Click a game above to load it.</div>
+      </div>
+      <button type="button" class="fullscreen-button" id="fullscreen-button">⛶ Fullscreen</button>
+      <div class="status" id="status"></div>
+    </div>
   </main>
 
   <script>
+    (function () {
+      'use strict';
 
-    const games = {
+      const games = {
+        btd5: { title: 'Bloons TD 5', url: 'https://www.gameflare.com/embed/bloons-tower-defense-5/' },
+        driveMad: { title: 'Drive Mad', url: 'https://ducky443747.github.io/games/DriveMad/' },
+        vex5: { title: 'Vex 5', url: 'https://vex6.io/vex-5' },
+        ovo: { title: 'OvO', url: 'https://www.miniplay.com/embed/ovo' },
+        bigTower: { title: 'Big Tower Tiny Square', url: 'https://www.miniplay.com/embed/big-tower-tiny-square' },
+        stickmanHook: { title: 'Stickman Hook', url: 'https://www.bubbleshooter.net/embed.php?id=1197' },
+        blumgiSlime: { title: 'Blumgi Slime', url: 'https://www.bubbleshooter.net/embed.php?id=2983' },
+        blumgiMerge: { title: 'Blumgi Merge', url: 'https://ant.games/g/blumgi-merge' },
+        bobTheRobber: { title: 'Bob the Robber', url: 'https://www.bubbleshooter.net/game/bob-the-robber/' }
+      };
 
-      /\* ORIGINAL GAMES \*/
+      const buttons = Array.from(document.querySelectorAll('.game-button'));
+      const container = document.getElementById('game-container');
+      const title = document.getElementById('game-title');
+      const status = document.getElementById('status');
+      const fullscreenButton = document.getElementById('fullscreen-button');
 
-      btd5: {
-        title: "Bloons TD 5",
-        url: "https://www.gameflare.com/embed/bloons-tower-defense-5/"
-      },
+      function loadGame(gameName, button) {
+        const game = games[gameName];
+        if (!game) return;
 
-      driveMad: {
-        title: "Drive Mad",
-        url: "https://ducky443747.github.io/games/DriveMad/"
-      },
+        title.textContent = game.title;
+        status.textContent = 'Loading ' + game.title + '…';
+        container.innerHTML = '';
 
-      vex5: {
-        title: "Vex 5",
-        url: "https://vex6.io/vex-5"
-      },
-
-      ovo: {
-        title: "OvO",
-        url: "https://www.miniplay.com/embed/ovo"
-      },
-
-      bigTower: {
-        title: "Big Tower Tiny Square",
-        url: "https://www.miniplay.com/embed/big-tower-tiny-square"
-      },
-
-      stickmanHook: {
-        title: "Stickman Hook",
-        url: "https://www.bubbleshooter.net/embed.php?id=1197"
-      },
-
-      blumgiSlime: {
-        title: "Blumgi Slime",
-        url: "https://www.bubbleshooter.net/embed.php?id=2983"
-      },
-
-      blumgiMerge: {
-        title: "Blumgi Merge",
-        url: "https://ant.games/g/blumgi-merge"
-      },
-
-      bobTheRobber: {
-        title: "Bob the Robber",
-        url: "https://www.bubbleshooter.net/game/bob-the-robber/"
-      },
-
-    };
-
-
-    function loadGame(gameName, button) {
-
-      const game = games[gameName];
-
-      const container =
-        document.getElementById("game-container");
-
-      const title =
-        document.getElementById("game-title");
-
-      if (!game) {
-        return;
-      }
-
-      container.innerHTML = "";
-
-      title.textContent = game.title;
-
-      const iframe =
-        document.createElement("iframe");
-
-      iframe.src = game.url;
-
-      iframe.setAttribute("frameborder", "0");
-      iframe.setAttribute("scrolling", "no");
-      iframe.setAttribute("allowfullscreen", "true");
-
-      iframe.setAttribute(
-        "allow",
-        "autoplay; fullscreen; gamepad"
-      );
-
-      container.appendChild(iframe);
-
-      document
-        .querySelectorAll(".game-button")
-        .forEach(function(btn) {
-          btn.classList.remove("active");
+        const iframe = document.createElement('iframe');
+        iframe.src = game.url;
+        iframe.title = game.title;
+        iframe.setAttribute('allow', 'autoplay; fullscreen; gamepad; pointer-lock');
+        iframe.setAttribute('allowfullscreen', 'true');
+        iframe.addEventListener('load', function () {
+          status.textContent = 'If the game area stays blank, that game host does not allow embedding on this site.';
         });
+        container.appendChild(iframe);
 
-      button.classList.add("active");
-    }
-
-
-    function fullscreenGame() {
-
-      const iframe =
-        document.querySelector(
-          "#game-container iframe"
-        );
-
-      if (!iframe) {
-        return;
+        buttons.forEach(function (btn) { btn.classList.remove('active'); });
+        button.classList.add('active');
       }
 
-      if (iframe.requestFullscreen) {
-        iframe.requestFullscreen();
-      }
+      buttons.forEach(function (button) {
+        button.addEventListener('click', function () {
+          loadGame(button.dataset.game, button);
+        });
+      });
 
-      else if (iframe.webkitRequestFullscreen) {
-        iframe.webkitRequestFullscreen();
-      }
-
-      else if (iframe.msRequestFullscreen) {
-        iframe.msRequestFullscreen();
-      }
-    }
-
-
-    loadGame(
-      "btd5",
-      document.querySelector(".game-button")
-    );
-
+      fullscreenButton.addEventListener('click', function () {
+        const iframe = container.querySelector('iframe');
+        if (!iframe) return;
+        if (iframe.requestFullscreen) iframe.requestFullscreen();
+        else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+      });
+    })();
   </script>
-
 </body>
 </html>
